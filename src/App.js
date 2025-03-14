@@ -1,4 +1,4 @@
-// Whiteboard Component - Enhanced with KendoReact Components & Real-Time Collaboration
+// Whiteboard  & Real-Time Collaboration
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@progress/kendo-react-buttons';
 import { ColorPicker, Input, NumericTextBox, Slider } from '@progress/kendo-react-inputs';
