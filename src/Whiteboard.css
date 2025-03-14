@@ -1,0 +1,11 @@
+.whiteboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+canvas {
+    background: white;
+    border-radius: 8px;
+}
