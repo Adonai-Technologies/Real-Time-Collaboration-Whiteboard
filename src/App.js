@@ -12,7 +12,8 @@ import { Chat } from '@progress/kendo-react-conversational-ui';
 import { Chart, ChartSeries, ChartSeriesItem } from '@progress/kendo-react-charts';
 import { Tooltip } from '@progress/kendo-react-tooltip';
 import { Loader } from '@progress/kendo-react-indicators';
-import { PDFExport } from '@progress/kendo-react-pdf'; // Corrected import
+import { PDFExport } from '@progress/kendo-react-pdf';
+import { Animation } from '@progress/kendo-react-animation';
 import { io } from 'socket.io-client';
 import '@progress/kendo-theme-material/dist/all.css';
 import './Whiteboard.css';
@@ -62,9 +63,13 @@ const Whiteboard = () => {
     const [cursorStyle, setCursorStyle] = useState("default");
     const [zoomLevel, setZoomLevel] = useState(1);
     const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+    const [uploadedImage, setUploadedImage] = useState(null);
+    const [selectedShape, setSelectedShape] = useState(null);
+    const [rotationAngle, setRotationAngle] = useState(0);
+    const [shapeScale, setShapeScale] = useState(1);
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
-    const pdfExportComponent = useRef(null); // Ref for PDF export
+    const pdfExportComponent = useRef(null);
     const startPointRef = useRef({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -321,6 +326,48 @@ const Whiteboard = () => {
         setMessages((prev) => [...prev, message]);
     }, []);
 
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    contextRef.current.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+                    setUploadedImage(img);
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const rotateShape = (angle) => {
+        if (selectedShape) {
+            contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            contextRef.current.save();
+            contextRef.current.translate(selectedShape.x + selectedShape.width / 2, selectedShape.y + selectedShape.height / 2);
+            contextRef.current.rotate((angle * Math.PI) / 180);
+            contextRef.current.translate(-(selectedShape.x + selectedShape.width / 2), -(selectedShape.y + selectedShape.height / 2));
+            contextRef.current.strokeRect(selectedShape.x, selectedShape.y, selectedShape.width, selectedShape.height);
+            contextRef.current.restore();
+            setRotationAngle(angle);
+        }
+    };
+
+    const resizeShape = (scale) => {
+        if (selectedShape) {
+            contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            contextRef.current.save();
+            contextRef.current.translate(selectedShape.x + selectedShape.width / 2, selectedShape.y + selectedShape.height / 2);
+            contextRef.current.scale(scale, scale);
+            contextRef.current.translate(-(selectedShape.x + selectedShape.width / 2), -(selectedShape.y + selectedShape.height / 2));
+            contextRef.current.strokeRect(selectedShape.x, selectedShape.y, selectedShape.width, selectedShape.height);
+            contextRef.current.restore();
+            setShapeScale(scale);
+        }
+    };
+
     const steps = [
         { label: "Start" },
         { label: "Draw" },
@@ -329,31 +376,47 @@ const Whiteboard = () => {
     ];
 
     return (
-        <div className={`whiteboard-container ${darkMode ? "dark-mode" : ""}`}>
+        <div className="whiteboard-container">
             <AppBar>
                 <AppBarSection>
                     <h3>Whiteboard</h3>
                 </AppBarSection>
                 <AppBarSpacer />
                 <AppBarSection>
-                    <Button onClick={() => setDarkMode((prev) => !prev)}>
-                        Toggle Dark Mode
-                    </Button>
-                    <Button onClick={undo}>Undo</Button>
-                    <Button onClick={redo}>Redo</Button>
-                    <Button onClick={exportWhiteboard}>Export as PNG</Button>
-                    <Button onClick={exportAsSVG}>Export as SVG</Button>
-                    <Button onClick={exportAsPDF}>Export as PDF</Button>
+                    <Animation type="fade" duration={500}>
+                        <Button onClick={() => setDarkMode((prev) => !prev)}>
+                            Toggle Dark Mode
+                        </Button>
+                    </Animation>
+                    <Animation type="fade" duration={500}>
+                        <Button onClick={undo}>Undo</Button>
+                    </Animation>
+                    <Animation type="fade" duration={500}>
+                        <Button onClick={redo}>Redo</Button>
+                    </Animation>
+                    <Animation type="fade" duration={500}>
+                        <Button onClick={exportWhiteboard}>Export as PNG</Button>
+                    </Animation>
+                    <Animation type="fade" duration={500}>
+                        <Button onClick={exportAsSVG}>Export as SVG</Button>
+                    </Animation>
+                    <Animation type="fade" duration={500}>
+                        <Button onClick={exportAsPDF}>Export as PDF</Button>
+                    </Animation>
                     {Object.keys(users).map(userId => (
-                        <Avatar key={userId} style={{ backgroundColor: users[userId]?.color || "gray" }}>
-                            {users[userId]?.initials || "?"}
-                        </Avatar>
+                        <Animation key={userId} type="zoom" duration={500}>
+                            <Avatar style={{ backgroundColor: users[userId]?.color || "gray" }}>
+                                {users[userId]?.initials || "?"}
+                            </Avatar>
+                        </Animation>
                     ))}
                 </AppBarSection>
             </AppBar>
 
             {notifications.map((note, index) => (
-                <Notification key={index} type={{ style: "info", icon: true }}>{note}</Notification>
+                <Animation key={index} type="slide" duration={500}>
+                    <Notification type={{ style: "info", icon: true }}>{note}</Notification>
+                </Animation>
             ))}
 
             <Drawer expanded={drawerExpanded} position="start" mode="push" onOverlayClick={() => setDrawerExpanded(false)}>
@@ -431,7 +494,12 @@ const Whiteboard = () => {
                         ref={canvasRef}
                         width={800}
                         height={500}
-                        style={{ border: '1px solid black', background: darkMode ? '#222' : '#f8f9fa', borderRadius: '8px', cursor: cursorStyle }}
+                        style={{ 
+                            border: '1px solid black', 
+                            background: darkMode ? '#222' : '#f8f9fa', 
+                            borderRadius: '8px', 
+                            cursor: cursorStyle 
+                        }}
                         onMouseDown={selectedTool === "Eraser" ? erase : startDrawing}
                         onMouseMove={selectedTool === "Eraser" ? erase : draw}
                         onMouseUp={stopDrawing}
@@ -470,6 +538,21 @@ const Whiteboard = () => {
                     />
                 </div>
             </PDFExport>
+
+            {/* Image Upload */}
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
+
+            {/* Shape Rotation */}
+            <div>
+                <label>Rotate Shape:</label>
+                <Slider value={rotationAngle} onChange={(e) => rotateShape(e.value)} min={0} max={360} step={1} />
+            </div>
+
+            {/* Shape Resizing */}
+            <div>
+                <label>Resize Shape:</label>
+                <Slider value={shapeScale} onChange={(e) => resizeShape(e.value)} min={0.5} max={2} step={0.1} />
+            </div>
         </div>
     );
 };
