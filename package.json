@@ -1,0 +1,92 @@
+{
+  "name": "my-kendoreact-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@progress/kendo-data-query": "^1.7.1",
+    "@progress/kendo-drawing": "^1.21.2",
+    "@progress/kendo-licensing": "^1.5.0",
+    "@progress/kendo-react-animation": "^9.5.0",
+    "@progress/kendo-react-buttons": "^9.5.0",
+    "@progress/kendo-react-charts": "^9.5.0",
+    "@progress/kendo-react-common": "^9.5.0",
+    "@progress/kendo-react-conversational-ui": "^9.5.0",
+    "@progress/kendo-react-data-tools": "^9.5.0",
+    "@progress/kendo-react-dateinputs": "^9.5.0",
+    "@progress/kendo-react-dialogs": "^9.5.0",
+    "@progress/kendo-react-dropdowns": "^9.5.0",
+    "@progress/kendo-react-editor": "^9.5.0",
+    "@progress/kendo-react-excel-export": "^9.5.0",
+    "@progress/kendo-react-form": "^9.5.0",
+    "@progress/kendo-react-gantt": "^9.5.0",
+    "@progress/kendo-react-gauges": "^9.5.0",
+    "@progress/kendo-react-grid": "^9.5.0",
+    "@progress/kendo-react-indicators": "^9.5.0",
+    "@progress/kendo-react-inputs": "^9.5.0",
+    "@progress/kendo-react-intl": "^9.5.0",
+    "@progress/kendo-react-labels": "^9.5.0",
+    "@progress/kendo-react-layout": "^9.5.0",
+    "@progress/kendo-react-listbox": "^9.5.0",
+    "@progress/kendo-react-listview": "^9.5.0",
+    "@progress/kendo-react-map": "^9.5.0",
+    "@progress/kendo-react-notification": "^9.5.0",
+    "@progress/kendo-react-orgchart": "^9.5.0",
+    "@progress/kendo-react-pdf": "^9.5.0",
+    "@progress/kendo-react-pdf-viewer": "^9.5.0",
+    "@progress/kendo-react-pivotgrid": "^9.5.0",
+    "@progress/kendo-react-popup": "^9.5.0",
+    "@progress/kendo-react-progressbars": "^9.5.0",
+    "@progress/kendo-react-ripple": "^9.5.0",
+    "@progress/kendo-react-scheduler": "^9.5.0",
+    "@progress/kendo-react-scrollview": "^9.5.0",
+    "@progress/kendo-react-sortable": "^9.5.0",
+    "@progress/kendo-react-spreadsheet": "^9.5.0",
+    "@progress/kendo-react-taskboard": "^9.5.0",
+    "@progress/kendo-react-tooltip": "^9.5.0",
+    "@progress/kendo-react-treelist": "^9.5.0",
+    "@progress/kendo-react-treeview": "^9.5.0",
+    "@progress/kendo-react-upload": "^9.5.0",
+    "@progress/kendo-svg-icons": "^4.0.0",
+    "@progress/kendo-theme-bootstrap": "^10.3.1",
+    "@progress/kendo-theme-default": "^10.3.1",
+    "@progress/kendo-theme-material": "^10.3.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-scripts": "5.0.1",
+    "styled-components": "^6.1.15",
+    "web-vitals": "^3.5.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "sass": "^1.85.1",
+    "tailwindcss": "^4.0.13"
+  }
+}
